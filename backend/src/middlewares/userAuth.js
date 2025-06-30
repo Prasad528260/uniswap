@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
+import User from '../models/user.js'
 
 export const userAuth=async(req,res,next)=>{
     try {
         const cookie= req.cookies;
         const {token}= cookie;
         const decoded= jwt.verify(token,"UniSwap@5460")
-        const {userId}= decoded;
-        const user = await user.findOne({_id:userId});
+        const {_id}= decoded;
+        const user = await User.findOne({_id});
         if (!user) {
             throw new Error("User Not Found");
         }
