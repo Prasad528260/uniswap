@@ -18,11 +18,11 @@ app.use(
   })
 );
 
-app.use("/", authRouter);
+app.use("/auth", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", notesRouter);
-app.use("/", bookRouter);
+app.use("/book", bookRouter);
 
 const PORT = 5000;
 connectDB()

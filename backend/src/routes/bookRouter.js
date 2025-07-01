@@ -1,5 +1,5 @@
 import express from 'express'
-import { addBook, deleteBook, getBooks } from '../controllers/bookController.js'
+import { addBook, deleteBook, getBooks, getUserBooks } from '../controllers/bookController.js'
 import { userAuth } from '../middlewares/userAuth.js';
 import upload from '../middlewares/upload.js';
 const bookRouter= express.Router();
@@ -8,9 +8,12 @@ const bookRouter= express.Router();
 bookRouter.post('/addbook',userAuth,upload.single('bookImg'),addBook)
 
 // * Get Books
-bookRouter.get('/book/view',userAuth,getBooks)
+bookRouter.get('/getbook',userAuth,getBooks)
 
 // * Delete Books
-bookRouter.delete('/book/delete',userAuth,deleteBook)
+bookRouter.delete('/delete/:bookId',userAuth,deleteBook)
+
+// * Get User Books
+bookRouter.get('/userbooks',userAuth,getUserBooks)
 
 export default bookRouter;

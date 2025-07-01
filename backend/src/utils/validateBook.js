@@ -1,6 +1,6 @@
 
-export const validateBook = ({title,author,condition,price,description,category}) => {
-    if(!title || !author || !condition || !price || !description || !category){
+export const validateBook = ({title,subject,condition,price,description,category,author}) => {
+    if(!title || !subject || !author || !condition || !price || !description || !category){
         throw new Error("All fields are required")
     }
     return true;

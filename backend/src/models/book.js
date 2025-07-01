@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const bookSchema = new mongoose.Schema({
 
-  Title: {
+  title: {
     type: String,
     required: true,
     validator:{
@@ -13,7 +13,19 @@ const bookSchema = new mongoose.Schema({
         }
     }
   },
-  Subject: {
+  author: {
+    type: String,
+    required: true,
+    validator:{
+        function (value) {
+            if (value.length>20) {
+                throw new Error("Author should be less than 30 characters");
+            }
+            return true;
+        }
+    }
+  },
+  subject: {
     type: String,
     required: true,
     validator:{
@@ -25,7 +37,7 @@ const bookSchema = new mongoose.Schema({
         }
     }
   },
-  Desription: {
+  description: {
     type: String,
     required: true,
     validator:{
