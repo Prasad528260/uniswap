@@ -4,8 +4,8 @@ import cors from "cors";
 import authRouter from "./routes/authRouter.js";
 import profileRouter from "./routes/profileRouter.js";
 import requestRouter from "./routes/requestRouter.js";
-import notesRouter from "./routes/notesRouter.js";
 import bookRouter from "./routes/bookRouter.js";
+import orderRouter from "./routes/orderRouter.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -19,10 +19,10 @@ app.use(
 );
 
 app.use("/auth", authRouter);
-app.use("/", profileRouter);
-app.use("/", requestRouter);
-app.use("/", notesRouter);
+app.use("/profile", profileRouter);
+app.use("/request", requestRouter);
 app.use("/book", bookRouter);
+app.use("/order", orderRouter);
 
 const PORT = 5000;
 connectDB()

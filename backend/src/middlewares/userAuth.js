@@ -20,7 +20,7 @@ export const userAuth = async (req, res, next) => {
     if (!user) {
       throw new Error("User Not Found");
     }
-    console.log(user);
+    // console.log(user);
     req.user = user;
     next();
   } catch (error) {

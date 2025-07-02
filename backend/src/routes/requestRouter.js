@@ -1,17 +1,16 @@
 import express from 'express'
+import { userAuth } from '../middlewares/userAuth.js';
+import { sendRequest, viewPendingRequest,acceptRequest } from '../controllers/requestController.js';
 const requestRouter= express.Router();
 
 // * Make a request
-requestRouter.post('/book',(req,res,next)=>{
+requestRouter.post('/send/:productId',userAuth,sendRequest)
 
-})
+// * Get Pending  requests
+requestRouter.get('/view',userAuth,viewPendingRequest)
 
-// * Get All the requests
-requestRouter.get('/book/view',(req,res,next)=>{
-
-})
-
-
+// * Accept Request and Create Order
+requestRouter.put('/accept/:requestId',userAuth,acceptRequest)
 
 
 export default requestRouter;

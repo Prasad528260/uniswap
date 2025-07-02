@@ -120,8 +120,8 @@ export const deleteBook = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid Book ID" });
     }
     const objctBookId= new mongoose.Types.ObjectId(bookId)
-    const deletedBook = await Book.findByIdAndDelete({_id:objctBookId});
-    if (!deleteBook) {
+    const deletedBook = await Book.findByIdAndDelete({_id:objctBookId,sellerId:user._id});
+    if (!deletedBook) {
       console.log("ERROR : BOOK NOT FOUND");
       return res.status(400).json({ message: "Book Not Found" });
     }
@@ -129,5 +129,29 @@ export const deleteBook = async (req, res, next) => {
   } catch (error) {
     console.log("ERROR : DELETE BOOK FAILED", error.message);
     res.status(400).json({ message: "Delete Book Failed" });
+  }
+};
+
+// * Get Notes
+export const getNotes = async (req, res, next) => {
+  const user = req.user;
+  if (!user) {
+    console.log("ERROR : USER NOT FOUND");
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  try {
+    const notes = await Book.find({ category: "notes" })
+      .select(
+        "_id title subject author condition price semester category description bookImg "
+      )
+      .populate("sellerId", "firstName lastName _id department profilePicture");
+    if (!notes) {
+      console.log("ERROR : NOTES NOT FOUND");
+      return res.status(400).json({ message: "Notes Not Found" });
+    }
+    res.status(200).json(notes);
+  } catch (error) {
+    console.log("ERROR : GET NOTES FAILED", error.message);
+    res.status(400).json({ message: "Get Notes Failed" });
   }
 };
