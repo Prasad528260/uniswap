@@ -35,10 +35,11 @@ export const addBook = async (req, res, next) => {
     });
     if (isValid) {
       console.log(bookImg);
+      const newPrice = book.getPrice(price);
       let book = new Book({
         title,
         condition,
-        price,
+        price:newPrice,
         subject,
         author,
         semester,
@@ -48,7 +49,7 @@ export const addBook = async (req, res, next) => {
         sellerId: user._id,
       });
       console.log(book);
-
+      
       book = await book.save();
       res.status(200).json(book);
     }
@@ -61,17 +62,29 @@ export const addBook = async (req, res, next) => {
 // * Get All Books
 // TODO : after fetching book ensure required data is fetched -- DONE
 export const getBooks = async (req, res, next) => {
+
+  const {semester} = req.query;
   const user = req.user;
   if (!user) {
     console.log("ERROR : USER NOT FOUND");
     return res.status(400).json({ message: "User Not Found" });
   }
   try {
-    const books = await Book.find({ category: "book" })
+    let books;
+    if(semester){
+       books = await Book.find({ category: "book" ,status:"Available",semester})
       .select(
         "_id title subject author condition price semester category description bookImg "
       )
       .populate("sellerId", "firstName lastName _id department profilePicture");
+    }
+    else{
+       books = await Book.find({ category: "book" ,status:"Available"})
+      .select(
+        "_id title subject author condition price semester category description bookImg "
+      )
+      .populate("sellerId", "firstName lastName _id department profilePicture");
+    }
     if (!books) {
       console.log("ERROR : BOOK NOT FOUND");
       return res.status(400).json({ message: "Book Not Found" });

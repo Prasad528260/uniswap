@@ -1,4 +1,5 @@
 
+import Book from "../models/book.js";
 import Order from "../models/order.js";
 import mongoose from "mongoose";
 
@@ -77,6 +78,15 @@ export const getOrders = async (req, res, next) => {
       if (!order) {
         console.log("ERROR : ORDER NOT FOUND");
         return res.status(400).json({ message: "Order Not Found" });
+      }
+      const book = await Book.findOneAndUpdate(
+        { _id: order.productId },
+        { status: "sold" },
+        { new: true }
+      );
+      if (!book) {
+        console.log("ERROR : BOOK NOT FOUND");
+        return res.status(400).json({ message: "Book Not Found" });
       }
       res.status(200).json(order);
     } catch (error) {
