@@ -5,6 +5,7 @@ const storage = multer.diskStorage({
     req.user=user;
     return cb(null, "src/uploads");
   },
+  
   filename: (req, file, cb) => {
     return cb(null,`${Date.now()}-${file.originalname}`);
   },
