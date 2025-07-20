@@ -9,6 +9,8 @@ import Landing from "./components/Landing";
 import BookForm from "./components/BookForm";
 import Books from "./components/Books";
 import BookDetail from "./components/BookDetail";
+import Requests from "./components/Requests";
+import Orders from "./components/Orders";
 
 function App() {
   return (
@@ -22,9 +24,11 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/sell" element={<BookForm />} />
             <Route path="/get-books" element={<Books />} />
-            
+            <Route path="/view-requests" element={<Requests />} />
+            <Route path="/view-orders" element={<Orders />} />
             <Route path="/book-details" element={<BookDetail />} />
           </Route>
+          
         </Routes>
       </BrowserRouter>
     </>

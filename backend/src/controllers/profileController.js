@@ -1,14 +1,32 @@
 import User from "../models/user.js";
+import cloudinary from "../utils/cloudinary.js";
 
 // * Update Profile
+
 export const updateProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    const { firstName, lastName, profilePicture } = req.body;
-    const {_id} = user;
+    const { firstName, lastName } = req.body;
+    const { _id } = user;
+    const profilePicture = req.file;
     if (!user) {
       console.log("ERROR : USER NOT FOUND");
       return res.status(400).json({ message: "User Not Found" });
+    }
+    let profileUrl = user.profilePicture;
+    if (profilePicture) {
+      // * uploading image buffer to cloudinary
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({
+          folder: "UniSwap_profile_pic",
+          resource_type: "image",
+        },(error,result)=>{
+           if (error) return reject(error);
+            resolve(result);
+        });
+        stream.end(profilePicture.buffer)
+      });
+      profileUrl=result.secure_url;
     }
     // what if user wants to update some fields and not all
     const updatedUser = await User.findByIdAndUpdate(
@@ -16,12 +34,12 @@ export const updateProfile = async (req, res, next) => {
       {
         firstName: firstName || user.firstName,
         lastName: lastName || user.lastName,
-        profilePicture: profilePicture || user.profilePicture,
+        profilePicture: profileUrl,
       },
       { new: true }
     ).select("firstName lastName department profilePicture");
-    console.log(updatedUser);
-    
+    // console.log(updatedUser);
+
     res.status(200).json(updatedUser);
   } catch (error) {
     console.log("ERROR : UPDATE PROFILE FAILED", error.message);

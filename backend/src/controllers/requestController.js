@@ -58,6 +58,10 @@ export const viewPendingRequest = async (req, res, next) => {
     }).populate(
       "recieverId",
       "firstName lastName _id department profilePicture"
+    )
+    .populate(
+      "productId",
+      "title author _id bookImg"
     );
     if (!pendingRequest) {
       console.log("ERROR : PENDING REQUEST NOT FOUND");
