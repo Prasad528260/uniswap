@@ -9,8 +9,8 @@ requestRouter.post('/send/:productId',userAuth,sendRequest)
 // * Get Pending  requests
 requestRouter.get('/view',userAuth,viewPendingRequest)
 
-// * Accept Request and Create Order
-requestRouter.put('/accept/:requestId',userAuth,acceptRequest)
+// * Accept/Reject Request and Create Order
+requestRouter.put('/:status/:requestId',userAuth,acceptRequest)
 
 
 export default requestRouter;

@@ -11,6 +11,8 @@ import Books from "./components/Books";
 import BookDetail from "./components/BookDetail";
 import Requests from "./components/Requests";
 import Orders from "./components/Orders";
+import OrderPage from "./components/OrderCard/OrderPage";
+import OrderDetails from "./components/OrderCard/OrderDetails";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
             <Route path="/view-requests" element={<Requests />} />
             <Route path="/view-orders" element={<Orders />} />
             <Route path="/book-details" element={<BookDetail />} />
+            <Route path="/get-orders/:type" element={<OrderPage/>}/>
+            <Route path="/order-details" element={<OrderDetails/>} />
           </Route>
           
         </Routes>

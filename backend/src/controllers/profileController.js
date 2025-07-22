@@ -6,7 +6,7 @@ import cloudinary from "../utils/cloudinary.js";
 export const updateProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    const { firstName, lastName } = req.body;
+    const { firstName, lastName,about } = req.body;
     const { _id } = user;
     const profilePicture = req.file;
     if (!user) {
@@ -35,9 +35,10 @@ export const updateProfile = async (req, res, next) => {
         firstName: firstName || user.firstName,
         lastName: lastName || user.lastName,
         profilePicture: profileUrl,
+        about: about || user.about,
       },
       { new: true }
-    ).select("firstName lastName department profilePicture");
+    ).select("firstName lastName department profilePicture about");
     // console.log(updatedUser);
 
     res.status(200).json(updatedUser);
@@ -55,8 +56,8 @@ export const getProfile = async (req, res, next) => {
       console.log("ERROR : USER NOT FOUND");
       return res.status(400).json({ message: "User Not Found" });
     }
-    const { firstName, lastName, department, profilePicture } = user;
-    res.status(200).json({ firstName, lastName, department, profilePicture });
+    const { firstName, lastName, department, profilePicture,about } = user;
+    res.status(200).json({ firstName, lastName, department, profilePicture,about });
   } catch (error) {
     console.log("ERROR : GET PROFILE FAILED", error.message);
     res.status(400).json({ message: "Get Profile Failed" });

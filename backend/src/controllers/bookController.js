@@ -34,12 +34,15 @@ export const addBook = async (req, res, next) => {
       author,
     });
     if (isValid) {
-      console.log(bookImg);
-      const newPrice = book.getPrice(price);
+      if (!bookImg) {
+        throw new Error('Book image is required');
+      }
+      
+      // Create the book first
       let book = new Book({
         title,
         condition,
-        price:newPrice,
+        price: Number(price), // Ensure price is a number
         subject,
         author,
         semester,
@@ -48,6 +51,10 @@ export const addBook = async (req, res, next) => {
         bookImg: bookImg.filename,
         sellerId: user._id,
       });
+      
+      // Now we can use the book instance
+      const newPrice = book.getPrice(price);
+      book.price = newPrice; // Update the price after book initialization
       console.log(book);
       
       book = await book.save();

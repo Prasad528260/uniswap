@@ -13,6 +13,7 @@ export const sendRequest = async (req, res, next) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const productId = req.params.productId;
+
     // console.log(productId);
     const objctProductId = new mongoose.Types.ObjectId(productId);
     if (!mongoose.Types.ObjectId.isValid(objctProductId)) {
@@ -74,9 +75,11 @@ export const viewPendingRequest = async (req, res, next) => {
   }
 };
 
-// * Accept Request and Create Order
+// * Accept/Reject Request and Create Order
 export const acceptRequest = async (req, res, next) => {
   try {
+    console.log('Request Headers:', req.headers);
+    console.log('Authenticated User:', req.user);
     const user = req.user;
     if (!user) {
       console.log("ERROR : USER NOT FOUND");
@@ -84,10 +87,30 @@ export const acceptRequest = async (req, res, next) => {
     }
     const requestId = req.params.requestId;
     const objctRequestId = new mongoose.Types.ObjectId(requestId);
-    // console.log(objctRequestId);
+    let status = req.params.status;
+    // Convert status to lowercase for case-insensitive comparison
+    status = status.toLowerCase();
 
     if (!mongoose.Types.ObjectId.isValid(objctRequestId)) {
       return res.status(400).json({ message: "Invalid Request ID" });
+    }
+    if(status !== "accepted" && status !== "rejected"){
+      return res.status(400).json({ 
+        message: "Invalid Status. Status must be either 'accepted' or 'rejected'" 
+      });
+    }
+    
+    if(status === "rejected"){
+      const request = await Request.findOneAndUpdate(
+        { _id: objctRequestId, sellerId: user._id, status: "pending" },
+        { status: "rejected" },
+        { new: true }
+      );
+      if (!request) {
+        console.log("ERROR : REQUEST NOT FOUND");
+        return res.status(400).json({ message: "Request Not Found" });
+      }
+     return res.status(200).json(request);
     }
     const request = await Request.findOneAndUpdate(
       { _id: objctRequestId, sellerId: user._id, status: "pending" },
