@@ -2,12 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const bookSlice= createSlice({
     name : 'book',
-    initialState:null,
+    initialState:[],
     reducers:{
-        addBooks:(state,action)=> action.payload,
-        removeBooks:()=> null
+        addBooks:(state,action)=> {
+            state.push(action.payload);
+        },
+        removeBooks:(state,action)=> {
+        state= [];
     }
-
 })
 
 export default bookSlice.reducer

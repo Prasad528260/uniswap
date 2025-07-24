@@ -14,6 +14,7 @@ import Orders from "./components/Orders";
 import OrderPage from "./components/OrderCard/OrderPage";
 import OrderDetails from "./components/OrderCard/OrderDetails";
 import Qr from "./components/OrderCard/Qr";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 function App() {
   return (
     <>
@@ -21,19 +22,88 @@ function App() {
         <Routes>
           <Route path="/" element={<Body />}>
             <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoutes>
+                  <Home />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoutes>
+                  <Profile />
+                </ProtectedRoutes>
+              }
+            />
             <Route path="/" element={<Landing />} />
-            <Route path="/sell" element={<BookForm />} />
-            <Route path="/get-books" element={<Books />} />
-            <Route path="/view-requests" element={<Requests />} />
-            <Route path="/view-orders" element={<Orders />} />
-            <Route path="/book-details" element={<BookDetail />} />
-            <Route path="/get-orders/:type" element={<OrderPage/>}/>
-            <Route path="/order-details" element={<OrderDetails/>} />
-            <Route path="/qr" element={<Qr/>}/>
+            <Route
+              path="/sell"
+              element={
+                <ProtectedRoutes>
+                  <BookForm />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/get-books"
+              element={
+                <ProtectedRoutes>
+                  <Books />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/view-requests"
+              element={
+                <ProtectedRoutes>
+                  <Requests />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/view-orders"
+              element={
+                <ProtectedRoutes>
+                  <Orders />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/book-details"
+              element={
+                <ProtectedRoutes>
+                  <BookDetail />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/get-orders/:type"
+              element={
+                <ProtectedRoutes>
+                  <OrderPage />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/order-details"
+              element={
+                <ProtectedRoutes>
+                  <OrderDetails />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/qr"
+              element={
+                <ProtectedRoutes>
+                  <Qr />
+                </ProtectedRoutes>
+              }
+            />
           </Route>
-          
         </Routes>
       </BrowserRouter>
     </>
