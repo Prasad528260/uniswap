@@ -13,7 +13,7 @@ import Requests from "./components/Requests";
 import Orders from "./components/Orders";
 import OrderPage from "./components/OrderCard/OrderPage";
 import OrderDetails from "./components/OrderCard/OrderDetails";
-
+import Qr from "./components/OrderCard/Qr";
 function App() {
   return (
     <>
@@ -31,6 +31,7 @@ function App() {
             <Route path="/book-details" element={<BookDetail />} />
             <Route path="/get-orders/:type" element={<OrderPage/>}/>
             <Route path="/order-details" element={<OrderDetails/>} />
+            <Route path="/qr" element={<Qr/>}/>
           </Route>
           
         </Routes>

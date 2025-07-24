@@ -25,6 +25,10 @@ export const sendRequest = async (req, res, next) => {
       return res.status(400).json({ message: "Product Not Found" });
     }
     const seller = await User.findById(product.sellerId);
+    if(reciever._id === seller._id){
+      console.log("ERROR : SELLER AND RECIEVER ARE SAME");
+      return res.status(400).json({ message: "Seller and Reciever are Same" });
+    }
     if (!seller) {
       console.log("ERROR : SELLER NOT FOUND");
       return res.status(400).json({ message: "Seller Not Found" });

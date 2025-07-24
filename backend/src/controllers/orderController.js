@@ -106,7 +106,7 @@ export const getRecieverOrders = async (req, res, next) => {
     }).populate(
       "sellerId",
       "firstName lastName _id department profilePicture"
-    ).populate("productId", "title author _id bookImg");
+    ).populate("productId", "title author _id bookImg subject condition price semester category description bookImg");
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });

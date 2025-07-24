@@ -34,7 +34,7 @@ connectDB()
   .then(() => {
     console.log("connected to mngodb successfully");
     app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT} `);
+      console.log(`Server running at http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
