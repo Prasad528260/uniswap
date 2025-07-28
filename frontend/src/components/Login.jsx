@@ -3,7 +3,7 @@ import validator from "validator";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
-import {useDispatch,useSelector } from 'react-redux'
+import {useDispatch } from 'react-redux'
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
@@ -28,21 +28,15 @@ const Login = () => {
       setError("Invalid password");
       return;
     }
-    await axios
+   const res = await axios
       .post(
         BASE_URL + "/auth/login",
         { email, password },
         { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res.data);
-        dispatch(addUser(res.data));
-        navigate("/home");
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err?.response?.data?.message);
-      });
+      );
+      console.log(res.data)
+      dispatch(addUser(res.data));
+      navigate("/home");
   };
 
   const handleSignup = async () => {
@@ -66,21 +60,15 @@ const Login = () => {
       setError("Invalid password");
       return;
     }
-    await axios
+   const res = await axios
       .post(
         BASE_URL + "/auth/signup",
         { email, password, firstName, lastName, department },
         { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res.data);
-        dispatch(addUser(res.data));
-        navigate("/home");
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(err?.response?.data?.message);
-      });
+      );
+      console.log(res.data)
+      dispatch(addUser(res.data));
+      navigate("/home");
   };
 
   return (

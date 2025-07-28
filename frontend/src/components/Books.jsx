@@ -3,12 +3,21 @@ import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
 import Book from "./Book";
 import { motion ,AnimatePresence} from "framer-motion";
-
+import { useSelector,useDispatch } from "react-redux";
+import { addBooks } from "../utils/bookSlice";
+import { addNotes } from "../utils/notesSlice";
 const Books = () => {
-  const [books, setBooks] = useState();
+
+  const dispatch = useDispatch();
+
+  const books = useSelector((state) => state.books) || [];
   const [semester, setSemester] = useState("");
   const [notes, setNotes] = useState("");
-  const [notesData, setNotesData] = useState();
+  const notesData = useSelector((state) => state.notes) || [];
+  
+  console.log('Redux state - books:', books);
+  console.log('Redux state - notes:', notesData);
+ 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -16,7 +25,7 @@ const fadeInUp = {
   transition: { duration: 0.4, ease: "easeInOut" },
 };
   const handleFilter = () => {
-    if (notes === "") {
+    if (notes === "" ) {
       getBooks();
     } else {
       getNotes();
@@ -35,7 +44,7 @@ const fadeInUp = {
       }
     );
     console.log(res.data);
-    setNotesData(res.data);
+    dispatch(addNotes(res.data));
   };
 
   const getBooks = async () => {
@@ -51,11 +60,13 @@ const fadeInUp = {
       }
     );
     console.log(res.data);
-    setBooks(res.data);
+    dispatch(addBooks(res.data));
   };
 
   useEffect(() => {
+    // Always fetch fresh data when component mounts
     getBooks();
+    getNotes();
   }, []);
 
   if (!books) {

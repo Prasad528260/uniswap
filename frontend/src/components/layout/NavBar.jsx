@@ -21,11 +21,12 @@ const NavBar = () => {
     dispatch(removeUser());
     navigate("/");
   };
+ 
 
   return (
     <div className="navbar  bg-base-100 shadow-sm">
       <div className="flex-1">
-        <a className="btn btn-ghost text-2xl">UniSwap</a>
+        <Link to="/home"><p className="btn btn-ghost text-2xl">UniSwap</p></Link>
       </div>
       <div className="flex gap-2">
         {user && (

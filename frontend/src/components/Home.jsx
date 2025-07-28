@@ -1,8 +1,11 @@
 
 import { BookOpen, DollarSign } from 'lucide-react';
 import {Link, Links} from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
+  const user = useSelector((state)=>state.user)
+  // console.log(user)
   return (
      <div className="min-h-screen bg-gray-900 text-white p-8">
       {/* Heading */}

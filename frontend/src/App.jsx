@@ -14,7 +14,14 @@ import Orders from "./components/Orders";
 import OrderPage from "./components/OrderCard/OrderPage";
 import OrderDetails from "./components/OrderCard/OrderDetails";
 import Qr from "./components/OrderCard/Qr";
+import useFetchUser from "./hooks/useFetchUser";
+import { useEffect } from "react";
+
 function App() {
+  const getUser = useFetchUser();
+  useEffect(()=>{
+    getUser();
+  },[])
   return (
     <>
       <BrowserRouter>
