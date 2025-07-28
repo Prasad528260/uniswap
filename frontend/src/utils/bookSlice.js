@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+<<<<<<< HEAD
 const bookSlice = createSlice({
     name: 'book',
     initialState: [],
@@ -14,6 +15,17 @@ const bookSlice = createSlice({
         removeBooks: (state) => {
             return [];
         }
+=======
+const bookSlice= createSlice({
+    name : 'book',
+    initialState:[],
+    reducers:{
+        addBooks:(state,action)=> {
+            state.push(action.payload);
+        },
+        removeBooks:(state,action)=> {
+        state= [];
+>>>>>>> e04be9ec0a8ffe43c70f041fc0f76ad8b264bc5e
     }
 })
 

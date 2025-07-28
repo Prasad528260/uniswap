@@ -8,9 +8,15 @@ import { addBooks } from "../utils/bookSlice";
 import { addNotes } from "../utils/notesSlice";
 const Books = () => {
 
+<<<<<<< HEAD
   const dispatch = useDispatch();
 
   const books = useSelector((state) => state.books) || [];
+=======
+
+
+  const [books, setBooks] = useState();
+>>>>>>> e04be9ec0a8ffe43c70f041fc0f76ad8b264bc5e
   const [semester, setSemester] = useState("");
   const [notes, setNotes] = useState("");
   const notesData = useSelector((state) => state.notes) || [];
