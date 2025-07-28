@@ -17,97 +17,61 @@ import Qr from "./components/OrderCard/Qr";
 import useFetchUser from "./hooks/useFetchUser";
 import { useEffect } from "react";
 
-import ProtectedRoutes from "./components/ProtectedRoutes";
 function App() {
   const getUser = useFetchUser();
-  useEffect(()=>{
+  useEffect(() => {
     getUser();
-  },[])
+  }, []);
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Body />}>
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/home"
-              element={
-                <ProtectedRoutes>
-                  <Home />
-                </ProtectedRoutes>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoutes>
-                  <Profile />
-                </ProtectedRoutes>
-              }
-            />
+            <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Landing />} />
-            <Route
-              path="/sell"
-              element={
-                <ProtectedRoutes>
-                  <BookForm />
-                </ProtectedRoutes>
-              }
-            />
+            <Route path="/sell" element={<BookForm />} />
             <Route
               path="/get-books"
               element={
-                <ProtectedRoutes>
-                  <Books />
-                </ProtectedRoutes>
+                <Books />
               }
             />
             <Route
               path="/view-requests"
               element={
-                <ProtectedRoutes>
-                  <Requests />
-                </ProtectedRoutes>
+                <Requests />
               }
             />
             <Route
               path="/view-orders"
               element={
-                <ProtectedRoutes>
-                  <Orders />
-                </ProtectedRoutes>
+                <Orders />
               }
             />
             <Route
               path="/book-details"
               element={
-                <ProtectedRoutes>
-                  <BookDetail />
-                </ProtectedRoutes>
+                <BookDetail />
               }
             />
             <Route
               path="/get-orders/:type"
               element={
-                <ProtectedRoutes>
-                  <OrderPage />
-                </ProtectedRoutes>
+                <OrderPage />
               }
             />
             <Route
               path="/order-details"
               element={
-                <ProtectedRoutes>
-                  <OrderDetails />
-                </ProtectedRoutes>
+                <OrderDetails />
               }
             />
             <Route
               path="/qr"
               element={
-                <ProtectedRoutes>
-                  <Qr />
-                </ProtectedRoutes>
+                <Qr />
               }
             />
           </Route>
