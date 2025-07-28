@@ -8,12 +8,11 @@ import bookRouter from "./routes/bookRouter.js";
 import orderRouter from "./routes/orderRouter.js";
 import cookieParser from "cookie-parser";
 import path from 'path';
-import { fileURLToPath } from 'url';
+
+
 
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const __dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser())
 app.use(
@@ -28,6 +27,13 @@ app.use("/profile", profileRouter);
 app.use("/request", requestRouter);
 app.use("/book", bookRouter);
 app.use("/order", orderRouter);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get(/(.*)/,(req,res)=>{
+    res.sendFile(path.join(__dirname,"../frontend","dist","index.html"));
+  })
+}
 
 const PORT = 5000;
 connectDB()
