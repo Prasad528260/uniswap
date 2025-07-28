@@ -5,10 +5,10 @@ const completedOrderSlice = createSlice({
     initialState:[],
     reducers:{
         addCompletedOrder:(state,action)=> {
-            return action.payload;
+            state.push(action.payload)
         },
         removeCompletedOrder:(state,action)=> {
-            return state.filter((item) => item.id !== action.payload.id);
+            state = state.filter((item)=> item.id !== action.payload.id)
         }
     }
 })

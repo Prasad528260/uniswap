@@ -1,18 +1,35 @@
 import React, { useEffect } from "react";
 import RequestCard from "./RequestCard";
-import { useSelector } from "react-redux";
-import useFetchRequest from "../hooks/useFetchRequest";
-
+import { useSelector,useDispatch } from "react-redux";
+import { addRequest } from "../utils/requestSlice";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useState } from "react";
 const Requests = () => {
-  const requests = useSelector((state) => state.request);
 
-  const {getRequests,error} = useFetchRequest();
+  const dispatch = useDispatch();
+  const requests = useSelector((state) => state.request);
+  const [error, setError] = useState(null);
+  const getRequests = async () => {
+    try {
+       if(requests || requests.length >= 0) return;
+      const res = await axios.get(`${BASE_URL}/request/view`, {
+        withCredentials: true,
+      });
+      dispatch(addRequest(res.data));
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching requests:", err);
+      setError("Failed to load requests. Please try again later.");
+      throw err;
+    }
+  };
 
 
   useEffect(() => {
-    if (!requests || requests.length === 0){
+   
         getRequests();
-    }
+  
   }, []);
 
   if (!requests || requests.length === 0) {
