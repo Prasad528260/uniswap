@@ -8,8 +8,6 @@ import { removeUser } from "../../utils/userSlice";
 const NavBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  // console.log(user);
-
   const navigate = useNavigate();
   const handleLogout = async () => {
     const res = await axios.post(
@@ -17,7 +15,6 @@ const NavBar = () => {
       {},
       { withCredentials: true }
     );
-    // console.log(res.data);
     dispatch(removeUser());
     navigate("/");
   };
