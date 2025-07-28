@@ -8,21 +8,13 @@ import { addBooks } from "../utils/bookSlice";
 import { addNotes } from "../utils/notesSlice";
 const Books = () => {
 
-<<<<<<< HEAD
   const dispatch = useDispatch();
 
   const books = useSelector((state) => state.books) || [];
-=======
-
-
-  const [books, setBooks] = useState();
->>>>>>> e04be9ec0a8ffe43c70f041fc0f76ad8b264bc5e
   const [semester, setSemester] = useState("");
   const [notes, setNotes] = useState("");
   const notesData = useSelector((state) => state.notes) || [];
   
-  console.log('Redux state - books:', books);
-  console.log('Redux state - notes:', notesData);
  
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -49,7 +41,6 @@ const fadeInUp = {
         withCredentials: true,
       }
     );
-    console.log(res.data);
     dispatch(addNotes(res.data));
   };
 
@@ -65,7 +56,6 @@ const fadeInUp = {
         withCredentials: true,
       }
     );
-    console.log(res.data);
     dispatch(addBooks(res.data));
   };
 
