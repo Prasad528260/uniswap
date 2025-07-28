@@ -5,10 +5,10 @@ const pendingOrderSlice = createSlice({
     initialState:[],
     reducers:{
         addPendingOrder:(state,action)=> {
-            state.push(action.payload)
+            return action.payload;
         },
         removePendingOrder:(state,action)=> {
-            state = state.filter((item)=> item.id !== action.payload.id)
+            return state.filter((item)=> item.id !== action.payload.id)
         }
     }
 })

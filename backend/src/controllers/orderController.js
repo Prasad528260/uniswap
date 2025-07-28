@@ -14,9 +14,9 @@ export const getOrders = async (req, res, next) => {
       sellerId: user._id,
       status: "pending",
     }).populate(
-      "recieverId",
+      "sellerId",
       "firstName lastName _id department profilePicture"
-    );
+    ).populate("productId", "title author _id bookImg");
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });
@@ -40,9 +40,9 @@ export const getCompletedOrders = async (req, res, next) => {
       sellerId: user._id,
       status: "completed",
     }).populate(
-      "recieverId",
+      "sellerId",
       "firstName lastName _id department profilePicture"
-    );
+    ).populate("productId", "title author _id bookImg");
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });
@@ -129,6 +129,35 @@ export const getRecieverCompletedOrders = async (req, res, next) => {
     const orders = await Order.find({
       recieverId: user._id,
       status: "completed",
+    }).populate(
+      "sellerId",
+      "firstName lastName _id department profilePicture"
+    )
+    .populate("productId", "title author _id bookImg");
+    if (!orders) {
+      console.log("ERROR : ORDERS NOT FOUND");
+      return res.status(400).json({ message: "Orders Not Found" });
+    }
+    res.status(200).json(orders);
+  } catch (error) {
+    console.log("ERROR : GET ACCEPTED REQUEST FAILED", error.message);
+    res.status(400).json({ message: "Get Accepted Request Failed" });
+  }
+};
+
+// * Get History
+export const getHistory = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      console.log("ERROR : USER NOT FOUND");
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const orders = await Order.find({
+      $or: [
+        { sellerId: user._id },
+        { recieverId: user._id },
+      ],
     }).populate(
       "sellerId",
       "firstName lastName _id department profilePicture"

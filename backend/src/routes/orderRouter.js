@@ -18,4 +18,7 @@ orderRouter.get('/reciever/pending',userAuth,getRecieverOrders)
 // * Get Completed orders of reciever
 orderRouter.get('/reciever/completed',userAuth,getRecieverCompletedOrders)
 
+// * Get History
+orderRouter.get('/history',userAuth,getHistory)
+
 export default orderRouter;

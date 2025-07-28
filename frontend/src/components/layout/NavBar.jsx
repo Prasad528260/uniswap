@@ -63,7 +63,12 @@ const NavBar = () => {
               </li>
               <li>
                 <Link to="/view-orders" className="justify-between text-xl">
-                  View Orders
+                  View Orders(reciever)
+                </Link>
+              </li>
+              <li>
+                <Link to="/get-orders/seller" className="justify-between text-xl">
+                  View Orders(seller)
                 </Link>
               </li>
               <li>

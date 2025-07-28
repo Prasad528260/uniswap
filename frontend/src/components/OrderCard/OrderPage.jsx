@@ -3,10 +3,15 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../utils/constants";
 import OrderCard from "./OrderCard";
+import { useDispatch, useSelector } from "react-redux";
+import { addPendingOrder } from "../../utils/pendingOrderSlice";
+import { addCompletedOrder } from "../../utils/completedOrderSlice";
 
 const OrderPage = () => {
-  const [pendingOrders, setPendingOrders] = useState([]);
-  const [completedOrders, setCompletedOrders] = useState([]);
+
+  const dispatch = useDispatch();
+  const pendingOrders = useSelector((state) => state.pendingOrder);
+  const completedOrders = useSelector((state) => state.completedOrder);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,15 +23,17 @@ const OrderPage = () => {
       try {
         setLoading(true);
         if (type === "pending") {
-          const { data } = await axios.get(`${BASE_URL}/order/reciever/pending`, {
+          if (pendingOrders && pendingOrders.length > 0) return ;
+          const res = await axios.get(`${BASE_URL}/order/reciever/pending`, {
             withCredentials: true,
           });
-          setPendingOrders(data);
+         dispatch(addPendingOrder(res.data));
         } else if (type === "completed") {
-          const { data } = await axios.get(`${BASE_URL}/order/reciever/completed`, {
+          if (completedOrders && completedOrders.length > 0) return;
+          const res = await axios.get(`${BASE_URL}/order/reciever/completed`, {
             withCredentials: true,
           });
-          setCompletedOrders(data);
+         dispatch(addCompletedOrder(res.data));
         }
       } catch (err) {
         console.error("Error fetching orders:", err);
@@ -46,32 +53,32 @@ const OrderPage = () => {
   }
 
   if (error) {
-    return <div className="text-red-500 text-center p-4">{error}</div>;
+    return <div className="text-red-500 text-center p-4 text-2xl">{error}</div>;
   }
 
   if (type === "pending") {
     return (
       <div className="space-y-6">
         {pendingOrders?.length > 0 ? (
-          pendingOrders.map((order) => (
-            <OrderCard key={order._id} order={order} />
+          pendingOrders.map((order,index) => (
+            <OrderCard key={order._id+index} order={order} />
           ))
         ) : (
-          <div className="text-center text-gray-400 py-8">No pending orders found</div>
+          <div className="text-center text-2xl text-secondary py-8">No pending orders found</div>
         )}
       </div>
     );
   }
-
+console.log(completedOrders);
   if (type === "completed") {
     return (
       <div className="space-y-6">
-        {completedOrders?.length > 0 ? (
-          completedOrders.map((order) => (
-            <OrderCard key={order._id} order={order} />
+        {completedOrders?.length >0 ? (
+          completedOrders.map((order,index) => (
+            <OrderCard key={order._id+index} order={order} />
           ))
         ) : (
-          <div className="text-center text-gray-400 py-8">No completed orders found</div>
+          <div className="text-center text-2xl text-secondary py-8">No completed orders found</div>
         )}
       </div>
     );

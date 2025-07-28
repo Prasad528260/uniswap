@@ -1,16 +1,19 @@
 import React from "react";
 import { MapPin, Clock, User } from "lucide-react";
 import { BASE_URL } from "../../utils/constants";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Success from "./Success";
 import QrScanner from "./QrScanner";
+import { useSelector } from "react-redux";
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({order}) => {
   const navigate = useNavigate();
-  if (!order) return null;
+ console.log(order);
+ console.log(order.sellerId);
+ 
   const user = useSelector((state) => state.user);
+
   const [scanResult, setScanResult] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
   const [error, setError] = useState(null);
@@ -164,8 +167,7 @@ const OrderCard = ({ order }) => {
                     if (result === order._id) {
                       setShowScanner(false);
                       setScanResult(result);
-                      setError(null); 
-
+                      setError(null);
                     } else {
                       setShowScanner(false);
                       setScanResult(null);

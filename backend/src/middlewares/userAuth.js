@@ -11,6 +11,8 @@ export const userAuth = async (req, res, next) => {
     const { token } = cookie;
     if (!token) {
       console.log("ERROR : TOKEN NOT FOUND");
+      console.log(cookie);
+      console.log("hi");
       return res.status(401).json({ message: "Authentication token missing" });
     }
 

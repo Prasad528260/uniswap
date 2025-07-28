@@ -15,6 +15,8 @@ import OrderPage from "./components/OrderCard/OrderPage";
 import OrderDetails from "./components/OrderCard/OrderDetails";
 import Qr from "./components/OrderCard/Qr";
 import useFetchUser from "./hooks/useFetchUser";
+import SellerOrders from "./components/OrderCard/SellerOrders";
+import SellerOrderCard from "./components/OrderCard/SellerOrderCard";
 import { useEffect } from "react";
 
 function App() {
@@ -32,48 +34,15 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/" element={<Landing />} />
             <Route path="/sell" element={<BookForm />} />
-            <Route
-              path="/get-books"
-              element={
-                <Books />
-              }
-            />
-            <Route
-              path="/view-requests"
-              element={
-                <Requests />
-              }
-            />
-            <Route
-              path="/view-orders"
-              element={
-                <Orders />
-              }
-            />
-            <Route
-              path="/book-details"
-              element={
-                <BookDetail />
-              }
-            />
-            <Route
-              path="/get-orders/:type"
-              element={
-                <OrderPage />
-              }
-            />
-            <Route
-              path="/order-details"
-              element={
-                <OrderDetails />
-              }
-            />
-            <Route
-              path="/qr"
-              element={
-                <Qr />
-              }
-            />
+            <Route path="/get-books" element={<Books />} />
+            <Route path="/view-requests" element={<Requests />} />
+            <Route path="/view-orders" element={<Orders />} />
+            <Route path="/book-details" element={<BookDetail />} />
+            <Route path="/get-orders/:type" element={<OrderPage />} />
+            <Route path="/order-details" element={<OrderDetails />} />
+            <Route path="/qr" element={<Qr />} />
+            <Route path="/get-orders/seller" element={<SellerOrders />} />
+            <Route path="/get-orders/seller/:type" element={<SellerOrderCard />} />
           </Route>
         </Routes>
       </BrowserRouter>
