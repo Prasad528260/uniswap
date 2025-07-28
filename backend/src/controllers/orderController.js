@@ -13,10 +13,9 @@ export const getOrders = async (req, res, next) => {
     const orders = await Order.find({
       sellerId: user._id,
       status: "pending",
-    }).populate(
-      "sellerId",
-      "firstName lastName _id department profilePicture"
-    ).populate("productId", "title author _id bookImg");
+    })
+      .populate("sellerId", "firstName lastName _id department profilePicture")
+      .populate("productId", "title author _id bookImg");
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });
@@ -39,10 +38,9 @@ export const getCompletedOrders = async (req, res, next) => {
     const orders = await Order.find({
       sellerId: user._id,
       status: "completed",
-    }).populate(
-      "sellerId",
-      "firstName lastName _id department profilePicture"
-    ).populate("productId", "title author _id bookImg");
+    })
+      .populate("sellerId", "firstName lastName _id department profilePicture")
+      .populate("productId", "title author _id bookImg");
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });
@@ -103,10 +101,12 @@ export const getRecieverOrders = async (req, res, next) => {
     const orders = await Order.find({
       recieverId: user._id,
       status: "pending",
-    }).populate(
-      "sellerId",
-      "firstName lastName _id department profilePicture"
-    ).populate("productId", "title author _id bookImg subject condition price semester category description bookImg");
+    })
+      .populate("sellerId", "firstName lastName _id department profilePicture")
+      .populate(
+        "productId",
+        "title author _id bookImg subject condition price semester category description bookImg"
+      );
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });
@@ -129,11 +129,9 @@ export const getRecieverCompletedOrders = async (req, res, next) => {
     const orders = await Order.find({
       recieverId: user._id,
       status: "completed",
-    }).populate(
-      "sellerId",
-      "firstName lastName _id department profilePicture"
-    )
-    .populate("productId", "title author _id bookImg");
+    })
+      .populate("sellerId", "firstName lastName _id department profilePicture")
+      .populate("productId", "title author _id bookImg");
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });
@@ -154,15 +152,15 @@ export const getHistory = async (req, res, next) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const orders = await Order.find({
-      $or: [
-        { sellerId: user._id },
-        { recieverId: user._id },
-      ],
-    }).populate(
-      "sellerId",
-      "firstName lastName _id department profilePicture"
-    )
-    .populate("productId", "title author _id bookImg");
+      $or: [{ sellerId: user._id }, { recieverId: user._id }],
+      status: "completed",
+    })
+      .populate("sellerId", "firstName lastName _id department profilePicture")
+      .populate("productId", "title author _id bookImg")
+      .populate(
+        "recieverId",
+        "firstName lastName _id department profilePicture"
+      );
     if (!orders) {
       console.log("ERROR : ORDERS NOT FOUND");
       return res.status(400).json({ message: "Orders Not Found" });

@@ -1,6 +1,6 @@
 import express from 'express'
 import { userAuth } from '../middlewares/userAuth.js';
-import { getOrders, getCompletedOrders,completeOrder ,getRecieverOrders,getRecieverCompletedOrders} from '../controllers/orderController.js';
+import { getOrders, getCompletedOrders,completeOrder ,getRecieverOrders,getRecieverCompletedOrders,getHistory} from '../controllers/orderController.js';
 const orderRouter= express.Router();
 
 // * Get Pending orders of seller

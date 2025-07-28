@@ -18,6 +18,7 @@ import useFetchUser from "./hooks/useFetchUser";
 import SellerOrders from "./components/OrderCard/SellerOrders";
 import SellerOrderCard from "./components/OrderCard/SellerOrderCard";
 import { useEffect } from "react";
+import History from "./components/History/History.jsx";
 
 function App() {
   const getUser = useFetchUser();
@@ -43,6 +44,7 @@ function App() {
             <Route path="/qr" element={<Qr />} />
             <Route path="/get-orders/seller" element={<SellerOrders />} />
             <Route path="/get-orders/seller/:type" element={<SellerOrderCard />} />
+            <Route path="/history" element={<History />} />
           </Route>
         </Routes>
       </BrowserRouter>

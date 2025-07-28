@@ -8,7 +8,7 @@ import { removeUser } from "../../utils/userSlice";
 const NavBar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  console.log(user);
+  // console.log(user);
 
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -17,7 +17,7 @@ const NavBar = () => {
       {},
       { withCredentials: true }
     );
-    console.log(res.data);
+    // console.log(res.data);
     dispatch(removeUser());
     navigate("/");
   };
@@ -72,7 +72,7 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
-                <a className="justify-between text-xl">History</a>
+                <Link to="/history" className="justify-between text-xl">History</Link>
               </li>
               <li>
                 <a onClick={handleLogout} className="justify-between text-xl">

@@ -9,7 +9,7 @@ import { addUser } from "../utils/userSlice";
         const res = await axios.get(BASE_URL + "/profile/view", {
           withCredentials: true,
         });
-        console.log(res.data);
+        // console.log(res.data);
         dispatch(addUser(res.data));
       };
  return getUser;
