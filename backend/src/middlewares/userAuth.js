@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-
+import dotenv from "dotenv";
+dotenv.config();
 export const userAuth = async (req, res, next) => {
   try {
     const cookie = req.cookies;
@@ -11,18 +12,15 @@ export const userAuth = async (req, res, next) => {
     const { token } = cookie;
     if (!token) {
       console.log("ERROR : TOKEN NOT FOUND");
-      console.log(cookie);
-      console.log("hi");
       return res.status(401).json({ message: "Authentication token missing" });
     }
 
-    const decoded = jwt.verify(token, "UniSwap@5460");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { _id } = decoded;
     const user = await User.findOne({ _id });
     if (!user) {
       throw new Error("User Not Found");
     }
-    // console.log(user);
     req.user = user;
     next();
   } catch (error) {

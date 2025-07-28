@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Book from "../models/book.js";
 import { validateBook } from "../utils/validateBook.js";
-
+import cloudinary from "../utils/cloudinary.js";
 // * Adding a New book to sell
 export const addBook = async (req, res, next) => {
   try {
@@ -16,8 +16,8 @@ export const addBook = async (req, res, next) => {
       category,
       description,
     } = req.body;
-    const bookImg = req?.file || req?.files[0];
-    console.log(bookImg);
+    const bookImg = req?.file ;
+    // console.log(bookImg);
 
     const user = req.user;
     if (!user) {
@@ -37,7 +37,20 @@ export const addBook = async (req, res, next) => {
       if (!bookImg) {
         throw new Error('Book image is required');
       }
+     let bookImgUrl;
       
+      // * upload image to cloudinary
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream({
+          folder: "UniSwap_book_img",
+          resource_type: "image",
+        },(error,result)=>{
+           if (error) return reject(error);
+            resolve(result);
+        });
+        stream.end(bookImg.buffer)
+      });
+       bookImgUrl = result.secure_url;
       // Create the book first
       let book = new Book({
         title,
@@ -48,7 +61,7 @@ export const addBook = async (req, res, next) => {
         semester,
         category,
         description,
-        bookImg: bookImg.filename,
+        bookImg:bookImgUrl,
         sellerId: user._id,
       });
       
