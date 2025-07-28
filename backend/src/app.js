@@ -8,7 +8,8 @@ import bookRouter from "./routes/bookRouter.js";
 import orderRouter from "./routes/orderRouter.js";
 import cookieParser from "cookie-parser";
 import path from 'path';
-
+import dotenv from "dotenv";
+dotenv.config();
 
 
 const app = express();
@@ -35,7 +36,7 @@ if (process.env.NODE_ENV === "production") {
   })
 }
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 connectDB()
   .then(() => {
     console.log("connected to mngodb successfully");
