@@ -45,5 +45,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.log("ERROR : FAILED TO CONNECT TO MONGODB ", err.messaage);
+    console.log("ERROR : FAILED TO CONNECT TO MONGODB ", err);
   });
