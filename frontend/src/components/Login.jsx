@@ -7,8 +7,8 @@ import {useDispatch } from 'react-redux'
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
-  const [email, setEmail] = useState("prasad@gmail.com");
-  const [password, setPassword] = useState("Prasad@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [department, setDepartment] = useState("");
@@ -34,6 +34,10 @@ const Login = () => {
         { email, password },
         { withCredentials: true }
       );
+      if(!res.data){
+        setError("Invalid credentials");
+        return;
+      }
       console.log(res.data)
       dispatch(addUser(res.data));
       navigate("/home");
@@ -66,6 +70,10 @@ const Login = () => {
         { email, password, firstName, lastName, department },
         { withCredentials: true }
       );
+      if(!res.data){
+        setError("Invalid credentials");
+        return;
+      }
       console.log(res.data)
       dispatch(addUser(res.data));
       navigate("/home");
