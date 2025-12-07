@@ -54,7 +54,7 @@ const BookDetail = () => {
               <div className="relative group">
                 <figure className="w-full h-96 bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl overflow-hidden shadow-xl">
                   <img
-                    src={`http://localhost:5000/uploads/${encodeURIComponent(book.bookImg)}`}
+                    src={`https://uniswap-j698.onrender.com/uploads/${encodeURIComponent(book.bookImg)}`}
                     alt={book.title}
                     className="w-full h-full object-contain transition-transform hover:scale-105 duration-300"
                   />
