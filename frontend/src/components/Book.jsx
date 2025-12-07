@@ -32,7 +32,7 @@ const Book = ({book}) => {
             <div className="relative px-6 pt-6">
               <div className="w-full h-48 bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl flex items-center justify-center overflow-hidden shadow-lg border border-slate-600">
                 <img 
-                  src={`http://localhost:5000/uploads/${encodeURIComponent(book.bookImg)}`}
+                  src={`https://uniswap-j698.onrender.com/uploads/${encodeURIComponent(book.bookImg)}`}
                   alt={book.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
