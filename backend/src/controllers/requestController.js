@@ -45,7 +45,7 @@ export const sendRequest = async (req, res, next) => {
     res.status(200).json(request);
   } catch (error) {
     console.log("ERROR : SEND REQUEST FAILED", error.message);
-    res.status(400).json({ message: "Send Request Failed" });
+    return res.status(400).json({ message: "Send Request Failed" });
   }
 };
 
@@ -75,7 +75,7 @@ export const viewPendingRequest = async (req, res, next) => {
     res.status(200).json(pendingRequest);
   } catch (error) {
     console.log("ERROR : VIEW PENDING REQUEST FAILED", error.message);
-    res.status(400).json({ message: "View Pending Request Failed" });
+    return res.status(400).json({ message: "View Pending Request Failed" });
   }
 };
 
@@ -138,7 +138,7 @@ export const acceptRequest = async (req, res, next) => {
     res.status(200).json(order);
   } catch (error) {
     console.log("ERROR : ACCEPT REQUEST FAILED", error.message);
-    res.status(400).json({ message: "Accept Request Failed" });
+    return res.status(400).json({ message: "Accept Request Failed" });
   }
 };
 

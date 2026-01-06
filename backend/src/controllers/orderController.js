@@ -23,7 +23,7 @@ export const getOrders = async (req, res, next) => {
     res.status(200).json(orders);
   } catch (error) {
     console.log("ERROR : GET ACCEPTED REQUEST FAILED", error.message);
-    res.status(400).json({ message: "Get Accepted Request Failed" });
+    return res.status(400).json({ message: "Get Accepted Request Failed" });
   }
 };
 
@@ -48,7 +48,7 @@ export const getCompletedOrders = async (req, res, next) => {
     res.status(200).json(orders);
   } catch (error) {
     console.log("ERROR : GET ACCEPTED REQUEST FAILED", error.message);
-    res.status(400).json({ message: "Get Accepted Request Failed" });
+    return res.status(400).json({ message: "Get Accepted Request Failed" });
   }
 };
 
@@ -86,7 +86,7 @@ export const completeOrder = async (req, res, next) => {
     res.status(200).json(order);
   } catch (error) {
     console.log("ERROR : COMPLETE ORDER FAILED", error.message);
-    res.status(400).json({ message: "Complete Order Failed" });
+    return res.status(400).json({ message: "Complete Order Failed" });
   }
 };
 
@@ -114,7 +114,7 @@ export const getRecieverOrders = async (req, res, next) => {
     res.status(200).json(orders);
   } catch (error) {
     console.log("ERROR : GET ACCEPTED REQUEST FAILED", error.message);
-    res.status(400).json({ message: "Get Accepted Request Failed" });
+    return res.status(400).json({ message: "Get Accepted Request Failed" });
   }
 };
 
@@ -139,7 +139,7 @@ export const getRecieverCompletedOrders = async (req, res, next) => {
     res.status(200).json(orders);
   } catch (error) {
     console.log("ERROR : GET ACCEPTED REQUEST FAILED", error.message);
-    res.status(400).json({ message: "Get Accepted Request Failed" });
+    return res.status(400).json({ message: "Get Accepted Request Failed" });
   }
 };
 
@@ -168,6 +168,6 @@ export const getHistory = async (req, res, next) => {
     res.status(200).json(orders);
   } catch (error) {
     console.log("ERROR : GET ACCEPTED REQUEST FAILED", error.message);
-    res.status(400).json({ message: "Get Accepted Request Failed" });
+    return res.status(400).json({ message: "Get Accepted Request Failed" });
   }
 };

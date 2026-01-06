@@ -22,7 +22,7 @@ export const addBook = async (req, res, next) => {
     const user = req.user;
     if (!user) {
       console.log("ERROR : USER NOT FOUND AT BOOK");
-      throw new Error("User Not Found");
+      return res.status(400).json({ message: "User Not Found" });
     }
     const isValid = validateBook({
       title,
@@ -35,7 +35,7 @@ export const addBook = async (req, res, next) => {
     });
     if (isValid) {
       if (!bookImg) {
-        throw new Error('Book image is required');
+        return res.status(400).json({ message: 'Book image is required' });
       }
      let bookImgUrl;
       
@@ -75,7 +75,7 @@ export const addBook = async (req, res, next) => {
     }
   } catch (error) {
     console.log("ERROR : ADD BOOK FAILED", error.message);
-    res.status(400).json({ message: "Add Book Failed" });
+    return res.status(400).json({ message: "Add Book Failed" });
   }
 };
 
@@ -112,7 +112,7 @@ export const getBooks = async (req, res, next) => {
     res.status(200).json(books);
   } catch (error) {
     console.log("ERROR : GET BOOKS FAILED", error.message);
-    res.status(400).json({ message: "Get Books Failed" });
+    return res.status(400).json({ message: "Get Books Failed" });
   }
 };
 
@@ -135,7 +135,7 @@ export const getUserBooks = async (req, res, next) => {
     res.status(200).json(userBooks);
   } catch (error) {
     console.log("ERROR : GET USER BOOKS FAILED", error.message);
-    res.status(400).json({ message: "Get User Books Failed" });
+    return res.status(400).json({ message: "Get User Books Failed" });
   }
 };
 
@@ -161,7 +161,7 @@ export const deleteBook = async (req, res, next) => {
     res.status(200).json(deletedBook);
   } catch (error) {
     console.log("ERROR : DELETE BOOK FAILED", error.message);
-    res.status(400).json({ message: "Delete Book Failed" });
+    return res.status(400).json({ message: "Delete Book Failed" });
   }
 };
 
@@ -185,6 +185,6 @@ export const getNotes = async (req, res, next) => {
     res.status(200).json(notes);
   } catch (error) {
     console.log("ERROR : GET NOTES FAILED", error.message);
-    res.status(400).json({ message: "Get Notes Failed" });
+    return res.status(400).json({ message: "Get Notes Failed" });
   }
 };

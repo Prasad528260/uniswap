@@ -44,7 +44,7 @@ export const updateProfile = async (req, res, next) => {
     res.status(200).json(updatedUser);
   } catch (error) {
     console.log("ERROR : UPDATE PROFILE FAILED", error.message);
-    res.status(400).json({ message: "Update Profile Failed" });
+    return res.status(400).json({ message: "Update Profile Failed" });
   }
 };
 
@@ -60,6 +60,6 @@ export const getProfile = async (req, res, next) => {
     res.status(200).json({ firstName, lastName, department, profilePicture,about });
   } catch (error) {
     console.log("ERROR : GET PROFILE FAILED", error.message);
-    res.status(400).json({ message: "Get Profile Failed" });
+    return res.status(400).json({ message: "Get Profile Failed" });
   }
 };

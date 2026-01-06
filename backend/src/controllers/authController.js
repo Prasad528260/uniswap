@@ -17,7 +17,7 @@ export const signupController = async (req, res, next) => {
   );
   if (!isValid) {
     console.log("ERROR : SIGNUP VALIDATION FAILED");
-    throw new Error("Validation Failed");
+    return res.status(400).json({ message: "Validation Failed" });
   }
   const hashedPassword = await bcrypt.hash(password, 8);
   const user = new User({
@@ -37,7 +37,7 @@ export const signupController = async (req, res, next) => {
     res.status(201).json(user);
   } catch (e) {
     console.log("ERROR : USER NOT CREATED", e.message);
-    res.status(400).json({ message: "User Not Created" });
+   return res.status(400).json({ message: "User Not Created" });
   }
 };
 
@@ -47,11 +47,11 @@ export const loginController = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error("Invalid Credentials");
+      return res.status(400).json({ message: "Invalid Credentials" });
     }
     const isPasswordValid = await user.validatePassword(password);
     if (!isPasswordValid) {
-      throw new Error("Invalid Credentials");
+      return res.status(400).json({ message: "Invalid Credentials" });
     } else {
       const token = await user.getJWT();
       res.cookie("token", token, {
@@ -61,7 +61,7 @@ export const loginController = async (req, res, next) => {
     }
   } catch (e) {
     console.log("ERROR : LOGIN FAILED", e.message);
-    res.status(400).json({ message: "Login Failed" });
+    return res.status(400).json({ message: "Login Failed" });
   }
 };
 
@@ -72,5 +72,5 @@ export const logoutController = (req, res, next) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
   });
-  res.json({ message: "Logout successful" });
+  return res.json({ message: "Logout successful" });
 };
