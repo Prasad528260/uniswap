@@ -19,7 +19,7 @@ export const userAuth = async (req, res, next) => {
     const { _id } = decoded;
     const user = await User.findOne({ _id });
     if (!user) {
-      throw new Error("User Not Found");
+      return res.status(401).json({ message: "User Not Found" });
     }
     req.user = user;
     next();

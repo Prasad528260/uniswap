@@ -5,7 +5,7 @@ import QrCode from 'react-qr-code';
 const Qr = () => {
   const {order} = useLocation().state;
   const value = order._id;
-  console.log(order);
+  // console.log(order);
   
 
   
