@@ -92,14 +92,14 @@ export const getBooks = async (req, res, next) => {
   try {
     let books;
     if(semester){
-       books = await Book.find({ category: "book" ,status:"Available",semester})
+       books = await Book.find({ category: "book",sellerId:{$not:user._id},status:"Available",semester})
       .select(
         "_id title subject author condition price semester category description bookImg "
       )
       .populate("sellerId", "firstName lastName _id department profilePicture");
     }
     else{
-       books = await Book.find({ category: "book" ,status:"Available"})
+       books = await Book.find({ category: "book" ,sellerId:{$not:user._id},status:"Available"})
       .select(
         "_id title subject author condition price semester category description bookImg "
       )
