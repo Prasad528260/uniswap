@@ -1,22 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { MapPin, Clock, User } from "lucide-react";
 import { BASE_URL } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Success from "./Success";
-import QrScanner from "./QrScanner";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
-const OrderCard = ({order}) => {
+const OrderCard = ({ order }) => {
   const navigate = useNavigate();
-//  console.log(order);
-//  console.log(order.sellerId);
- 
   const user = useSelector((state) => state.user);
-
-  const [scanResult, setScanResult] = useState(null);
-  const [showScanner, setShowScanner] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -37,12 +29,32 @@ const OrderCard = ({order}) => {
     navigate("/order-details", { state: { order } });
   };
 
+  // --- NEW: Mark as complete ---
+  const markAsComplete = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.put(
+        `${BASE_URL}/order/complete/${order._id}`,
+        {},
+        { withCredentials: true } // use session cookie
+      );
+      toast.success("Order marked as complete!");
+      // Optionally, refresh the page or update state
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.response?.data?.message || "Failed to complete order");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 max-w-2xl w-full mx-auto shadow-2xl hover:shadow-3xl transition-all duration-300 hover:border-gray-700 group">
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Left side - Seller info and book image */}
+        {/* Left side - Seller info and book */}
         <div className="flex-1">
-          {/* Seller info with larger profile picture */}
+          {/* Seller info */}
           <div className="flex items-center space-x-6 mb-8">
             <div className="relative">
               <img
@@ -76,7 +88,7 @@ const OrderCard = ({order}) => {
             </div>
           </div>
 
-          {/* Book info with larger image */}
+          {/* Book info */}
           <div className="flex space-x-6 items-center">
             <div className="flex-shrink-0">
               <div className="w-24 h-36 bg-gradient-to-br from-blue-600 to-purple-700 rounded-lg shadow-lg flex items-center justify-center relative overflow-hidden">
@@ -106,7 +118,7 @@ const OrderCard = ({order}) => {
           </div>
         </div>
 
-        {/* Right side - Exchange details and actions */}
+        {/* Right side - Exchange details & actions */}
         <div className="md:w-1/3 space-y-6">
           {/* Exchange details */}
           <div className="bg-gray-800/50 p-5 rounded-xl">
@@ -135,8 +147,7 @@ const OrderCard = ({order}) => {
             </div>
           </div>
 
-          {/* Action buttons - Only show if order is pending */}
-
+          {/* Actions */}
           <div className="flex justify-end mt-6">
             <button
               className="relative px-6 py-3 bg-blue-700 hover:bg-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -145,43 +156,15 @@ const OrderCard = ({order}) => {
               <span className="relative z-10">View Details</span>
             </button>
           </div>
+
           {order.status === "pending" && (
-            <div className="mt-6">
-              <button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 active:scale-95 text-lg"
-                onClick={() => {
-                  // Add your complete order handler here
-                  if (user._id === order.sellerId._id) {
-                    navigate("/qr", { state: { order } });
-                  } else if (user._id === order.recieverId._id) {
-                    setShowScanner(true);
-                  }
-                }}
-              >
-                Mark as Complete
-              </button>
-              {scanResult && <Success order={order} />}
-              {showScanner && !scanResult && (
-                <QrScanner
-                  onScanSuccess={(result) => {
-                    if (result === order._id) {
-                      setShowScanner(false);
-                      setScanResult(result);
-                      setError(null);
-                    } else {
-                      setShowScanner(false);
-                      setScanResult(null);
-                      setError("Invalid QR Code");
-                    }
-                  }}
-                />
-              )}
-              {error && (
-                <div className="mt-4 text-red-400 font-medium text-center">
-                  {error}
-                </div>
-              )}{" "}
-            </div>
+            <button
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 active:scale-95 text-lg mt-4"
+              onClick={markAsComplete}
+            >
+              {loading ? "Completing..." : "Mark as Complete"}
+            </button>
           )}
         </div>
       </div>
