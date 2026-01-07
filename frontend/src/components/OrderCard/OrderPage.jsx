@@ -15,7 +15,7 @@ const OrderPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { type } = useParams();
+  const  type  = useParams().type;
 
   // * DEPENDING ON TYPE RENDER THE DATA LIKE PENDING AND COMPLETED
   useEffect(() => {
@@ -23,16 +23,19 @@ const OrderPage = () => {
       try {
         setLoading(true);
         if (type === "pending") {
-          if (pendingOrders && pendingOrders.length > 0) return ;
+          if ( pendingOrders?.length > 0) return ;
           const res = await axios.get(`${BASE_URL}/order/reciever/pending`, {
             withCredentials: true,
           });
+          // console.log(res);
+          
          dispatch(addPendingOrder(res.data));
         } else if (type === "completed") {
-          if (completedOrders && completedOrders.length > 0) return;
+          if (completedOrders?.length > 0) return;
           const res = await axios.get(`${BASE_URL}/order/reciever/completed`, {
             withCredentials: true,
           });
+          // console.log(res);
          dispatch(addCompletedOrder(res.data));
         }
       } catch (err) {
@@ -55,13 +58,16 @@ const OrderPage = () => {
   if (error) {
     return <div className="text-red-500 text-center p-4 text-2xl">{error}</div>;
   }
+  if(completedOrders?.length === 0 && pendingOrders?.length === 0){
+    return <div className="text-center text-2xl text-secondary py-8">No orders found</div>;
+  }
 
   if (type === "pending") {
     return (
       <div className="space-y-6">
         {pendingOrders?.length > 0 ? (
           pendingOrders.map((order,index) => (
-            <OrderCard key={order._id+index} order={order} />
+            <OrderCard key={order._id ?? `${order.createdAt}-${index}`} order={order} />
           ))
         ) : (
           <div className="text-center text-2xl text-secondary py-8">No pending orders found</div>
@@ -69,13 +75,13 @@ const OrderPage = () => {
       </div>
     );
   }
-console.log(completedOrders);
+// console.log(completedOrders);
   if (type === "completed") {
     return (
       <div className="space-y-6">
         {completedOrders?.length >0 ? (
           completedOrders.map((order,index) => (
-            <OrderCard key={order._id+index} order={order} />
+            <OrderCard key={order._id ?? `${order.createdAt}-${index}`} order={order} />
           ))
         ) : (
           <div className="text-center text-2xl text-secondary py-8">No completed orders found</div>

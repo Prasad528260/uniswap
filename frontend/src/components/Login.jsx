@@ -38,7 +38,7 @@ const Login = () => {
         setError("Invalid credentials");
         return;
       }
-      console.log(res.data)
+      // console.log(res.data)
       dispatch(addUser(res.data));
       navigate("/home");
   };

@@ -9,8 +9,8 @@ import { useSelector } from "react-redux";
 
 const OrderCard = ({order}) => {
   const navigate = useNavigate();
- console.log(order);
- console.log(order.sellerId);
+//  console.log(order);
+//  console.log(order.sellerId);
  
   const user = useSelector((state) => state.user);
 

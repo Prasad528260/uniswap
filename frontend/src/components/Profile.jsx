@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ProfileCard from "./Profile/ProfileCard";
 import EditProfileCard from "./Profile/EditProfileCard";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 const Profile = () => {
   const user = useSelector((state)=>state.user);
   if (!user) {
