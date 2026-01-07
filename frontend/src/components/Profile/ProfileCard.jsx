@@ -15,7 +15,7 @@ const ProfileCard = ({onEdit}) => {
         });
         const data = response.data;
         setProfileData(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }

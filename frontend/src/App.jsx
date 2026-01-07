@@ -19,6 +19,7 @@ import SellerOrders from "./components/OrderCard/SellerOrders";
 import SellerOrderCard from "./components/OrderCard/SellerOrderCard";
 import { useEffect } from "react";
 import History from "./components/History/History.jsx";
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const getUser = useFetchUser();
@@ -48,6 +49,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </>
   );
 }

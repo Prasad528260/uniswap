@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Upload } from "lucide-react";
 import { BASE_URL } from "../utils/constants";
+import { toast } from "react-hot-toast";
 
 export default function BookForm() {
-  const [title, setTitle] = useState("physics-atomic");
-  const [author, setAuthor] = useState("xyz");
-  const [subject, setSubject] = useState("physics");
-  const [description, setDescription] = useState("a good physics bok");
-  const [semester, setSemester] = useState("second");
-  const [category, setCategory] = useState("book");
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
+  const [semester, setSemester] = useState("");
+  const [category, setCategory] = useState("");
   const [condition, setCondition] = useState("good");
-  const [price, setPrice] = useState("300");
+  const [price, setPrice] = useState("");
   const [bookImg, setBookImg] = useState(null);
   const [error, setError] = useState(null);
 
@@ -46,10 +47,17 @@ export default function BookForm() {
     formData.append("condition", condition);
     formData.append("price", price);
     formData.append("bookImg", bookImg);
-    const res = await axios.post(BASE_URL + "/book/addbook", formData, {
+   try{ const res = await axios.post(BASE_URL + "/book/addbook", formData, {
       withCredentials: true,
     });
-    console.log(res.data);
+
+    // console.log(res.data);
+    toast.success("Book listed successfully");
+   }catch(error){
+    console.log(error);
+    toast.error(error?.response?.data?.message || "Error listing book");
+   }
+
   };
 
   return (

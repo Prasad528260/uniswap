@@ -5,6 +5,7 @@ import { addRequest } from "../utils/requestSlice";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 const Requests = () => {
 
   const dispatch = useDispatch();
@@ -17,11 +18,12 @@ const Requests = () => {
         withCredentials: true,
       });
       dispatch(addRequest(res.data));
+      toast.success("Requests loaded successfully");
       setError(null);
     } catch (err) {
       console.error("Error fetching requests:", err);
       setError("Failed to load requests. Please try again later.");
-      throw err;
+      toast.error(err?.response?.data?.message || "Failed to load requests. Please try again later.");
     }
   };
 

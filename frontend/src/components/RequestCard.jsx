@@ -2,6 +2,7 @@ import React from 'react';
 import { Clock, MapPin, BookOpen, ArrowRight, User } from 'lucide-react';
 import { BASE_URL } from '../utils/constants';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 
 const RequestCard = ({ request }) => {
@@ -12,8 +13,14 @@ const RequestCard = ({ request }) => {
   const product = request.productId || {};
 
   const handleRequest=async(status)=>{
+   try{
     const res = await axios.put(BASE_URL+`/request/${status}/${request._id}`,{},{withCredentials:true})
-    console.log(res);
+    // console.log(res);
+    toast.success("Request updated successfully");
+   }catch(error){
+    console.log(error);
+    toast.error(error?.response?.data?.message || "Failed to update request");
+   }
   }
   
 

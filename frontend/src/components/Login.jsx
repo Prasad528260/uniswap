@@ -3,8 +3,10 @@ import validator from "validator";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
-import {useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,13 +15,14 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [department, setDepartment] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  
   const handleSubmit = async () => {
+    setLoading(true);
     if (!validator.isEmail(email)) {
       setError("Invalid email");
       return;
@@ -28,22 +31,24 @@ const Login = () => {
       setError("Invalid password");
       return;
     }
-   const res = await axios
-      .post(
-        BASE_URL + "/auth/login",
-        { email, password },
-        { withCredentials: true }
-      );
-      if(!res.data){
-        setError("Invalid credentials");
-        return;
-      }
-      // console.log(res.data)
-      dispatch(addUser(res.data));
-      navigate("/home");
+    const res = await axios.post(
+      BASE_URL + "/auth/login",
+      { email, password },
+      { withCredentials: true }
+    );
+    if (!res.data) {
+      setError("Invalid credentials");
+      return;
+    }
+    // console.log(res.data)
+    dispatch(addUser(res.data));
+    toast.success("Login successful");
+    navigate("/home");
+    setLoading(false);
   };
 
   const handleSignup = async () => {
+    setLoading(true);
     if (!firstName || firstName === "") {
       setError("First name is required");
       return;
@@ -64,20 +69,28 @@ const Login = () => {
       setError("Invalid password");
       return;
     }
-   const res = await axios
-      .post(
+    try {
+      const res = await axios.post(
         BASE_URL + "/auth/signup",
         { email, password, firstName, lastName, department },
         { withCredentials: true }
       );
-      if(!res.data){
+      if (!res.data) {
         setError("Invalid credentials");
         return;
       }
-      console.log(res.data)
+      // console.log(res.data);
       dispatch(addUser(res.data));
+      toast.success("Signup successful");
       navigate("/home");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Error signing");
+      setLoading(false);
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
@@ -133,7 +146,6 @@ const Login = () => {
                     <option value="it">IT</option>
                     <option value="mech">MECH</option>
                     <option value="extc">EXTC</option>
-                    
                   </select>
                 </div>
               </>
@@ -171,7 +183,7 @@ const Login = () => {
               className="w-full bg-gradient-to-r from-accent to-warning hover:from-warning hover:to-accent text-white font-semibold py-3 px-4 rounded-lg text-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
               onClick={isLoginForm ? handleSubmit : handleSignup}
             >
-              {isLoginForm ? "Sign in" : "Signup "}
+              {loading ? <Loader2 className="animate-spin" /> : isLoginForm ? "Sign in" : "Signup "}
             </button>
           </div>
 

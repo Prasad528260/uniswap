@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react'
 import axios from 'axios'
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Success = ({order}) => {
+  const navigate = useNavigate();
   useEffect(() => {
     completeOrder();
   }, []);
@@ -9,9 +12,10 @@ const Success = ({order}) => {
     try {
       const res = await axios.put(`/order/complete/${order._id}`, {}, { withCredentials: true });
       console.log(res);
-      
+      toast.success("Order completed successfully");
     } catch (error) {
       console.log(error);
+      toast.error(error?.response?.data?.message || "Failed to complete order");
     }
   };
   return (

@@ -7,7 +7,7 @@ const Orders = () => {
   const navigate = useNavigate();
 
   const handleRoute = (type) =>{
-    console.log(type);
+    // console.log(type);
     
     navigate(`/get-orders/${type}`)
   }

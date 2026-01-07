@@ -4,15 +4,21 @@ import { BASE_URL } from "../../utils/constants";
 import { useState } from "react";
 import HistoryCard from "./HistoryCard";
 import { CheckCircle } from "lucide-react";
+import toast from "react-hot-toast";
 
 const History = () => {
   const [history, setHistory] = useState([]);
   const getHistory = async () => {
-    const res = await axios.get(`${BASE_URL}/order/history`, {
-      withCredentials: true,
-    });
-    // console.log(res.data);
-    setHistory(res.data);
+    try {
+      const res = await axios.get(`${BASE_URL}/order/history`, {
+        withCredentials: true,
+      });
+      // console.log(res.data);
+      setHistory(res.data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Failed to load history");
+    }
   };
   useEffect(() => {
     getHistory();
