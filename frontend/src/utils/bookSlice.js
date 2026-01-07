@@ -5,12 +5,11 @@ const bookSlice = createSlice({
     initialState: [],
     reducers: {
         addBooks: (state, action) => {
-            // If payload is an array, replace the state with it
-            // If it's a single item, add it to the state
-            return Array.isArray(action.payload) 
-                ? [...action.payload] 
-                : [...state, action.payload];
-        },
+      const { data, replace = true } = action.payload;
+      if (!Array.isArray(data)) return state;
+      // replace = true => new filter applied, start fresh
+      return replace ? [...data] : [...state, ...data];
+    },
         removeBooks: (state) => {
             return [];
         }

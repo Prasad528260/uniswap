@@ -5,7 +5,6 @@ import cloudinary from "../utils/cloudinary.js";
 // * Adding a New book to sell
 export const addBook = async (req, res, next) => {
   try {
-    
     const {
       title,
       subject,
@@ -16,7 +15,7 @@ export const addBook = async (req, res, next) => {
       category,
       description,
     } = req.body;
-    const bookImg = req?.file ;
+    const bookImg = req?.file;
     // console.log(bookImg);
 
     const user = req.user;
@@ -35,22 +34,25 @@ export const addBook = async (req, res, next) => {
     });
     if (isValid) {
       if (!bookImg) {
-        return res.status(400).json({ message: 'Book image is required' });
+        return res.status(400).json({ message: "Book image is required" });
       }
-     let bookImgUrl;
-      
+      let bookImgUrl;
+
       // * upload image to cloudinary
       const result = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream({
-          folder: "UniSwap_book_img",
-          resource_type: "image",
-        },(error,result)=>{
-           if (error) return reject(error);
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "UniSwap_book_img",
+            resource_type: "image",
+          },
+          (error, result) => {
+            if (error) return reject(error);
             resolve(result);
-        });
-        stream.end(bookImg.buffer)
+          }
+        );
+        stream.end(bookImg.buffer);
       });
-       bookImgUrl = result.secure_url;
+      bookImgUrl = result.secure_url;
       // Create the book first
       let book = new Book({
         title,
@@ -61,15 +63,15 @@ export const addBook = async (req, res, next) => {
         semester,
         category,
         description,
-        bookImg:bookImgUrl,
+        bookImg: bookImgUrl,
         sellerId: user._id,
       });
-      
+
       // Now we can use the book instance
       const newPrice = book.getPrice(price);
       book.price = newPrice; // Update the price after book initialization
       console.log(book);
-      
+
       book = await book.save();
       res.status(200).json(book);
     }
@@ -82,39 +84,47 @@ export const addBook = async (req, res, next) => {
 // * Get All Books
 // TODO : after fetching book ensure required data is fetched -- DONE
 export const getBooks = async (req, res, next) => {
-
-  const {semester} = req.query;
+  const { semester, page, limit } = req.query;
+  const pageNumber = Number(page) || 1;
+  const limitNumber = Number(limit) || 9;
+  const skip = (pageNumber - 1) * limitNumber;
   const user = req.user;
+
   if (!user) {
     console.log("ERROR : USER NOT FOUND");
     return res.status(400).json({ message: "User Not Found" });
   }
+
   try {
-    let books;
-    if(semester){
-       books = await Book.find({ category: "book",sellerId:{$not:user._id},status:"Available",semester})
-      .select(
-        "_id title subject author condition price semester category description bookImg "
-      )
-      .populate("sellerId", "firstName lastName _id department profilePicture");
-    }
-    else{
-       books = await Book.find({ category: "book" ,sellerId:{$not:user._id},status:"Available"})
-      .select(
-        "_id title subject author condition price semester category description bookImg "
-      )
-      .populate("sellerId", "firstName lastName _id department profilePicture");
-    }
-    if (!books) {
-      console.log("ERROR : BOOK NOT FOUND");
-      return res.status(400).json({ message: "Book Not Found" });
-    }
-    res.status(200).json(books);
+    let filter = { category: "book", sellerId: user._id, status: "Available" };
+    if (semester) filter.semester = semester;
+
+    const books = await Book.find(filter)
+      .select("_id title subject author condition price semester category description bookImg")
+      .populate("sellerId", "firstName lastName _id department profilePicture")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNumber);
+
+    const total = await Book.countDocuments(filter);
+
+    res.status(200).json({
+      data: books,
+      pagination: {
+        page: pageNumber,
+        limit: limitNumber,
+        total,
+        totalPages: Math.ceil(total / limitNumber),
+        hasNextPage: pageNumber * limitNumber < total,
+        hasPrevPage: pageNumber > 1,
+      },
+    });
   } catch (error) {
-    console.log("ERROR : GET BOOKS FAILED", error.message);
+    console.log("ERROR : GET BOOKS FAILED", error);
     return res.status(400).json({ message: "Get Books Failed" });
   }
 };
+
 
 // * Get Books uploaded by User
 // TODO : after fetching book ensure required data is fetched -- DONE
@@ -125,9 +135,12 @@ export const getUserBooks = async (req, res, next) => {
       console.log("ERROR : USER NOT FOUND");
       return res.status(400).json({ message: "User Not Found" });
     }
-    const userBooks = await Book.find({ category: "book", sellerId: user._id }).select(
-        "_id title subject author condition price semester category description bookImg "
-      );
+    const userBooks = await Book.find({
+      category: "book",
+      sellerId: user._id,
+    }).select(
+      "_id title subject author condition price semester category description bookImg "
+    );
     if (!userBooks) {
       console.log("ERROR : USER BOOKS NOT FOUND");
       return res.status(400).json({ message: "User Books Not Found" });
@@ -143,17 +156,20 @@ export const getUserBooks = async (req, res, next) => {
 // TODO : after deleting book ensure required data is deleted  -- DONE
 export const deleteBook = async (req, res, next) => {
   const user = req.user;
-  const {bookId} = req.params;
+  const { bookId } = req.params;
   if (!user) {
     console.log("ERROR : USER NOT FOUND");
     return res.status(400).json({ message: "User Not Found" });
   }
   try {
-     if (!mongoose.Types.ObjectId.isValid(bookId)) {
+    if (!mongoose.Types.ObjectId.isValid(bookId)) {
       return res.status(400).json({ message: "Invalid Book ID" });
     }
-    const objctBookId= new mongoose.Types.ObjectId(bookId)
-    const deletedBook = await Book.findByIdAndDelete({_id:objctBookId,sellerId:user._id});
+    const objctBookId = new mongoose.Types.ObjectId(bookId);
+    const deletedBook = await Book.findByIdAndDelete({
+      _id: objctBookId,
+      sellerId: user._id,
+    });
     if (!deletedBook) {
       console.log("ERROR : BOOK NOT FOUND");
       return res.status(400).json({ message: "Book Not Found" });
@@ -172,17 +188,36 @@ export const getNotes = async (req, res, next) => {
     console.log("ERROR : USER NOT FOUND");
     return res.status(400).json({ message: "User Not Found" });
   }
+  const { page, limit } = req.query;
+  const pageNumber = parseInt(page) || 1;
+  const limitNumber = parseInt(limit) || 9;
+  const skip = (pageNumber - 1) * limitNumber;
+  
   try {
     const notes = await Book.find({ category: "notes" })
       .select(
         "_id title subject author condition price semester category description bookImg "
       )
-      .populate("sellerId", "firstName lastName _id department profilePicture");
+      .populate("sellerId", "firstName lastName _id department profilePicture")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNumber);
     if (!notes) {
       console.log("ERROR : NOTES NOT FOUND");
       return res.status(400).json({ message: "Notes Not Found" });
     }
-    res.status(200).json(notes);
+    const total = await Book.countDocuments({ category: "notes" });
+    res.status(200).json({
+      data: notes,
+      pagination: {
+        page: pageNumber,
+        limit: limitNumber,
+        total,
+        totalPages: Math.ceil(total / limitNumber),
+        hasNextPage: pageNumber * limitNumber < total,
+        hasPrevPage: pageNumber > 1,
+      },
+    });
   } catch (error) {
     console.log("ERROR : GET NOTES FAILED", error.message);
     return res.status(400).json({ message: "Get Notes Failed" });
